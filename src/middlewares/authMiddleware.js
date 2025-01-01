@@ -19,11 +19,11 @@ const authenticateToken = async (req, res, next) => {
       }
 
       // Token içinden gelen kullanıcı ID'si ile BusinessOwner'ı doğrula
-      const userFromToken = await Users.findByPk(user.id);
+      const userFromToken = await Users.findByPk(user.userId);
       if (!userFromToken) {
         return res
           .status(404)
-          .json({ message: "Business Owner not found", success: false });
+          .json({ message: "User not found", success: false });
       }
 
       req.user = userFromToken;

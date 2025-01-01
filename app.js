@@ -13,7 +13,6 @@ const accountRoutes = require("./src/routes/accountRoutes");
 
 const app = express();
 
-
 app.use(cors());
 app.use(express.json());
 
@@ -22,15 +21,11 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/", (req, res) => {
-  res.json({ message: "Hello World" });
-});
-
-app.use(`/api/v${version}/languages`, languageRoutes);
-app.use(`/api/v${version}/projects`, projectRoutes);
-app.use(`/api/v${version}/contacts`, contactRoutes);
-app.use(`/api/v${version}/categories`, categoryRoutes);
-app.use(`/api/v${version}/accounts`, accountRoutes);
+app.use(`/${version}/languages`, languageRoutes);
+app.use(`/${version}/projects`, projectRoutes);
+app.use(`/${version}/contacts`, contactRoutes);
+app.use(`/${version}/categories`, categoryRoutes);
+app.use(`/${version}/accounts`, accountRoutes);
 
 sequelize.sync().then(() => {
   app.listen(PORT, () => {

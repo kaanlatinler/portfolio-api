@@ -1,24 +1,24 @@
-const { Languages } = require('../models');
-const { Projects } = require('../models');
+const { Languages } = require("../models");
+const { Projects } = require("../models");
 
 // Get all languages
 const getLanguages = async (req, res) => {
   try {
     const languages = await Languages.findAll({
       where: { is_active: true },
-      order: [['name', 'ASC']]
+      order: [["name", "ASC"]],
     });
 
     res.status(200).json({
       success: true,
-      data: languages
+      data: languages,
     });
   } catch (error) {
-    console.error('Error fetching languages:', error);
+    console.error("Error fetching Techs:", error);
     res.status(500).json({
       success: false,
-      message: 'Failed to fetch languages',
-      error: error.message
+      message: "Failed to fetch Techs",
+      error: error.message,
     });
   }
 };
@@ -27,24 +27,24 @@ const getLanguages = async (req, res) => {
 const getLanguageById = async (req, res) => {
   try {
     const language = await Languages.findByPk(req.params.id);
-    
+
     if (!language) {
       return res.status(404).json({
         success: false,
-        message: 'Language not found'
+        message: "Tech not found",
       });
     }
 
     res.status(200).json({
       success: true,
-      data: language
+      data: language,
     });
   } catch (error) {
-    console.error('Error fetching language:', error);
+    console.error("Error fetching Tech:", error);
     res.status(500).json({
       success: false,
-      message: 'Failed to fetch language',
-      error: error.message
+      message: "Failed to fetch Tech",
+      error: error.message,
     });
   }
 };
@@ -57,38 +57,38 @@ const createLanguage = async (req, res) => {
     if (!name) {
       return res.status(400).json({
         success: false,
-        message: 'Language name is required'
+        message: "Tech name is required",
       });
     }
 
     // Check if language already exists
     const existingLanguage = await Languages.findOne({
-      where: { name }
+      where: { name },
     });
 
     if (existingLanguage) {
       return res.status(400).json({
         success: false,
-        message: 'Language already exists'
+        message: "Tech already exists",
       });
     }
 
     const language = await Languages.create({
       name,
-      is_active: true
+      is_active: true,
     });
 
     res.status(201).json({
       success: true,
-      message: 'Language created successfully',
-      data: language
+      message: "Tech created successfully",
+      data: language,
     });
   } catch (error) {
-    console.error('Error creating language:', error);
+    console.error("Error creating Tech:", error);
     res.status(500).json({
       success: false,
-      message: 'Failed to create language',
-      error: error.message
+      message: "Failed to create Tech",
+      error: error.message,
     });
   }
 };
@@ -104,40 +104,40 @@ const updateLanguage = async (req, res) => {
     if (!language) {
       return res.status(404).json({
         success: false,
-        message: 'Language not found'
+        message: "Tech not found",
       });
     }
 
     // If updating name, check if it already exists
     if (name && name !== language.name) {
       const existingLanguage = await Languages.findOne({
-        where: { name }
+        where: { name },
       });
 
       if (existingLanguage) {
         return res.status(400).json({
           success: false,
-          message: 'Language name already exists'
+          message: "Tech name already exists",
         });
       }
     }
 
     await language.update({
       name: name || language.name,
-      is_active: is_active !== undefined ? is_active : language.is_active
+      is_active: is_active !== undefined ? is_active : language.is_active,
     });
 
     res.status(200).json({
       success: true,
-      message: 'Language updated successfully',
-      data: language
+      message: "Tech updated successfully",
+      data: language,
     });
   } catch (error) {
-    console.error('Error updating language:', error);
+    console.error("Error updating Tech:", error);
     res.status(500).json({
       success: false,
-      message: 'Failed to update language',
-      error: error.message
+      message: "Failed to update Tech",
+      error: error.message,
     });
   }
 };
@@ -151,7 +151,7 @@ const deleteLanguage = async (req, res) => {
     if (!language) {
       return res.status(404).json({
         success: false,
-        message: 'Language not found'
+        message: "Tech not found",
       });
     }
 
@@ -160,14 +160,14 @@ const deleteLanguage = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: 'Language deleted successfully'
+      message: "Tech deleted successfully",
     });
   } catch (error) {
-    console.error('Error deleting language:', error);
+    console.error("Error deleting Tech:", error);
     res.status(500).json({
       success: false,
-      message: 'Failed to delete language',
-      error: error.message
+      message: "Failed to delete Tech",
+      error: error.message,
     });
   }
 };
@@ -181,19 +181,19 @@ const hardDeleteLanguage = async (req, res) => {
     if (!language) {
       return res.status(404).json({
         success: false,
-        message: 'Language not found'
+        message: "Tech not found",
       });
     }
 
     // Check if language is being used by any projects
     const projectCount = await Projects.count({
-      where: { language_id: id }
+      where: { language_id: id },
     });
 
     if (projectCount > 0) {
       return res.status(400).json({
         success: false,
-        message: 'Cannot delete language as it is being used by projects'
+        message: "Cannot delete Tech as it is being used by projects",
       });
     }
 
@@ -202,14 +202,14 @@ const hardDeleteLanguage = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: 'Language permanently deleted'
+      message: "Tech permanently deleted",
     });
   } catch (error) {
-    console.error('Error permanently deleting language:', error);
+    console.error("Error permanently deleting Tech:", error);
     res.status(500).json({
       success: false,
-      message: 'Failed to permanently delete language',
-      error: error.message
+      message: "Failed to permanently delete Tech",
+      error: error.message,
     });
   }
 };
@@ -220,5 +220,5 @@ module.exports = {
   createLanguage,
   updateLanguage,
   deleteLanguage,
-  hardDeleteLanguage
+  hardDeleteLanguage,
 };
