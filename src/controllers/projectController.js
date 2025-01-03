@@ -57,6 +57,38 @@ const getProjectById = async (req, res) => {
   }
 };
 
+// Get single project by name
+const getProjectByName = async (req, res) => {
+  try {
+    const project = await Projects.findOne({
+      where: { name: req.params.name },
+      include: [
+        { model: Categories, attributes: ["name"] },
+        { model: Languages, attributes: ["name"] },
+      ],
+    });
+
+    if (!project) {
+      return res.status(404).json({
+        success: false,
+        message: "Project not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: project,
+    });
+  } catch (error) {
+    console.error("Error fetching project:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch project",
+      error: error.message,
+    });
+  }
+};
+
 // Create new project
 const createProject = async (req, res) => {
   try {
@@ -280,6 +312,7 @@ const hardDeleteProject = async (req, res) => {
 module.exports = {
   getProjects,
   getProjectById,
+  getProjectByName,
   createProject,
   updateProject,
   deleteProject,
